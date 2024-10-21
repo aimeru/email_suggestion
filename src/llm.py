@@ -6,7 +6,7 @@ import time
 client = OpenAI(api_key=OPENAI_KEY)
 
 
-def query_chatgpt(prompt):
+async def query_chatgpt(prompt):
     response = client.beta.chat.completions.parse(
             model="gpt-4o-mini",
             messages=[
@@ -26,7 +26,7 @@ def query_chatgpt(prompt):
     return response.choices[0].message.parsed
 
 
-def process_text_with_llm(context, manifest):
+async def process_text_with_llm(context, manifest):
     start_time = time.time()  # Record the start time
 
     prompt = f"""Please review the following email conversation:{context}
@@ -38,7 +38,7 @@ def process_text_with_llm(context, manifest):
 
     while retries < max_retries:
         try:
-            response = query_chatgpt(prompt)
+            response = await query_chatgpt(prompt)
             elapsed_time = time.time() - start_time  # Calculate elapsed time
             print(
                 f"Total execution time: {elapsed_time:.2f} seconds for description --> {manifest}")  # Print execution
